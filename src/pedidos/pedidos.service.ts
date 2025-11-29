@@ -22,21 +22,7 @@ export class PedidosService {
     private readonly detallePedidoRepository: Repository<DetallePedido>,
   ) {}
 
-  // async create(creatPedidoDto:CreatePedidoDto,nombre_usuario:string):Promise<Pedido> {
-  //   try{
-  //     const nuevoCliente= this.clienteRepository.findOne({where:{nombre_usuario}})//busca cliente
-  //     if(!nuevoCliente){
-  //       console.error("No existe el cliente")
-  //     }
-  //     const nuevoPedido = this.pedidoRepository.create(creatPedidoDto);
-  //     return await this.pedidoRepository.save(nuevoPedido)
-
-  //   } catch(error){
-  //     console.error('Error al crear Pedido',error)
-  //     throw new InternalServerErrorException('Error al crear Pedido')
-  //   }
-  // }
-  async create(
+async create(
     creatPedidoDto: CreatePedidoDto,
     nombre_usuario: string,
   ): Promise<Pedido> {
