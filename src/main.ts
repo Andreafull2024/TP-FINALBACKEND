@@ -1,24 +1,28 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import express from 'express';
-import cors from 'cors';
 
 async function bootstrap() {
-  const server = express();
+  const app = await NestFactory.create(AppModule);
 
-  // Middleware CORS explícito
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-  server.use(
-    cors({
-      origin: 'https://tp-finalfrotend.vercel.app',
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-      credentials: true,
-    }),
-  );
+  // Middleware manual para CORS
+  app.use((req, res, next) => {
+    res.header(
+      'Access-Control-Allow-Origin',
+      'https://tp-finalfrotend.vercel.app',
+    );
+    res.header(
+      'Access-Control-Allow-Methods',
+      'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    );
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
 
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200); // 👈 responde al preflight
+    }
+    next();
+  });
+
   await app.listen(parseInt(process.env.PORT ?? '3000'));
 }
 void bootstrap();
