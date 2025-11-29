@@ -4,9 +4,11 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // 🔓 CORS configurado para permitir acceso desde tu frontend en Vercel
   app.enableCors({
-    origin: 'https://tp-finalfrotend.vercel.app/', // 👈 URL exacta de tu frontend
+    origin: [
+      'http://localhost:5173', // desarrollo local con Vite
+      'https://tp-finalfrotend.vercel.app', // producción en Vercel
+    ],
     credentials: true,
   });
 
