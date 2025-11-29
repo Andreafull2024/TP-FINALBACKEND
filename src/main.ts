@@ -1,39 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import express from 'express';
+import cors from 'cors';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const server = express();
 
-  // Middleware para forzar CORS en todas las rutas
-  app.use((req, res, next) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    res.setHeader(
-      'Access-Control-Allow-Origin',
-      'https://tp-finalfrotend.vercel.app',
-    );
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    res.setHeader(
-      'Access-Control-Allow-Methods',
-      'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    );
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      'Content-Type, Authorization',
-    );
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  // Middleware CORS explícito
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+  server.use(
+    cors({
+      origin: 'https://tp-finalfrotend.vercel.app',
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
+    }),
+  );
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (req.method === 'OPTIONS') {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      res.status(200).end(); // 👈 responde correctamente al preflight
-    } else {
-      next();
-    }
-  });
-
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
   await app.listen(parseInt(process.env.PORT ?? '3000'));
 }
 void bootstrap();
