@@ -27,15 +27,15 @@ import { PersonalizarPizzasModule } from './personalizar-pizzas/personalizar-piz
         host: config.get<string>('DB_HOST') ?? 'localhost',
         port: parseInt(config.get<string>('DB_PORT') ?? '3306'),
         username: config.get<string>('DB_USER') ?? 'root',
-        // eslint-disable-next-line prettier/prettier
         password: config.get<string>('DB_PASSWORD') ?? '',
         database: config.get<string>('DB_NAME') ?? 'test',
-
         autoLoadEntities: true,
         synchronize: true, // ⚠️ solo para desarrollo
-        ssl: {
-          rejectUnauthorized: false, // Railway usa SSL, esto evita errores de certificado
-        },
+
+        // ✅ Solo incluir ssl si Railway lo requiere explícitamente
+        // ssl: {
+        //   rejectUnauthorized: false,
+        // },
       }),
     }),
 
