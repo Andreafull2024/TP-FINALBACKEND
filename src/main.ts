@@ -9,6 +9,7 @@ async function bootstrap() {
       'http://localhost:5173', // desarrollo local con Vite
       'https://tp-finalfrotend.vercel.app', // producción en Vercel
     ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
 
