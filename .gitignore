@@ -42,6 +42,22 @@ lerna-debug.log*
 .env.production.local
 .env.local
 
+# Ignorar variables de entorno
+.env
+.env.*
+!env.local
+
+# Ignorar dependencias
+node_modules/
+
+# Ignorar builds
+dist/
+build/
+
+# Ignorar logs
+*.log
+
+
 # temp directory
 .temp
 .tmp
