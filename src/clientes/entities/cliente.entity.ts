@@ -17,7 +17,7 @@ export class Cliente {
   email: string;
 
   @OneToMany(() => Pedido, (pedido) => pedido.cliente)
-  pedido: Pedido;
+  pedidos: Pedido[]; // ✅ corregido
 
   @OneToMany(() => Pizza, (pizza) => pizza.cliente)
   pizzas: Pizza[];
