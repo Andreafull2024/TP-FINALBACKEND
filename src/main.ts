@@ -6,7 +6,7 @@ async function bootstrap() {
 
   // 🔓 CORS configurado para permitir acceso desde tu frontend en Vercel
   app.enableCors({
-    origin: 'https://tp-finalfrotend.vercel.app', // 👈 URL exacta de tu frontend
+    origin: 'https://tp-finalfrotend.vercel.app/', // 👈 URL exacta de tu frontend
     credentials: true,
   });
 
