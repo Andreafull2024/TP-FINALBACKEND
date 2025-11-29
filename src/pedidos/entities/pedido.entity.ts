@@ -30,7 +30,7 @@ export class Pedido {
   @Column('timestamp')
   fecha: Date;
 
-  @ManyToOne(() => Cliente, (cliente) => cliente.pedido)
+  @ManyToOne(() => Cliente, (cliente) => cliente.pedidos)
   @JoinColumn()
   cliente: Cliente;
 
