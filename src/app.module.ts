@@ -1,13 +1,10 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PedidosModule } from './pedidos/pedidos.module';
 import { PagosModule } from './pagos/pagos.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Cliente } from './clientes/entities/cliente.entity';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Pedido } from './pedidos/entities/pedido.entity';
 import { ClientesModule } from './clientes/clientes.module';
 import { EstadoPedidoModule } from './estado_pedido/estado_pedido.module';
 import { DetallePedidoModule } from './detalle_pedido/detalle_pedido.module';
@@ -16,20 +13,34 @@ import { PersonalizarPizzasModule } from './personalizar-pizzas/personalizar-piz
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql', // o postgres, sqlite, etc.
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'pizzaconmigo',
-      autoLoadEntities: true,
-      synchronize: true,
+    // ConfigModule lee el archivo .env
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
+
+    // TypeORM usa las variables de entorno
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'mysql',
+        host: config.get<string>('DB_HOST') ?? 'localhost',
+        port: parseInt(config.get<string>('DB_PORT') ?? '3306'),
+        username: config.get<string>('DB_USER') ?? 'root',
+       password: config.get<string>('DB_PASSWORD') ?? '',
+       database: config.get<string>('DB_NAME') ?? 'test',
+        autoLoadEntities: true,
+        synchronize: true, // ⚠️ solo para desarrollo
+        ssl: {
+          rejectUnauthorized: false, // Railway usa SSL, esto evita errores de certificado
+        },
+      }),
+    }),
+
+    // Tus módulos
     PedidosModule,
     PagosModule,
     ClientesModule,
-    EstadoPedidoModule,
     EstadoPedidoModule,
     DetallePedidoModule,
     PizzasModule,
