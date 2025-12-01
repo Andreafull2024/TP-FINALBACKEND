@@ -8,7 +8,7 @@ async function bootstrap() {
   origin: [
     'http://localhost:5173',
     'https://tp-finalfrontend-8g1r4ue.vercel.app',
-    'https://tp-finalfrontend-l8gbnjwle-andrea-san-juans-projects.vercel.app'
+      'https://tp-finalfrontend-l8gbnjwle-andrea-san-juans-projects.vercel.app',
   ],
   credentials: true,
 });
