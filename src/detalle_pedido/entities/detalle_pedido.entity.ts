@@ -1,27 +1,20 @@
-import { Pedido } from 'src/pedidos/entities/pedido.entity';
-import { Pizza } from 'src/pizzas/entities/pizza.entity';
-import {
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Pedido } from '../../pedidos/entities/pedido.entity';
+import { Pizza } from '../../pizzas/entities/pizza.entity';
+
 @Entity()
 export class DetallePedido {
-  @ManyToOne(() => Pizza, (pizza) => pizza.detallePedidos, {
-    onDelete: 'CASCADE',
-  })
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  cantidad: number;
+
+  @ManyToOne(() => Pizza, (pizza) => pizza.detallePedidos, { onDelete: 'CASCADE' })
   @JoinColumn()
   pizza: Pizza;
 
-  @ManyToOne(() => Pedido, (pedido) => pedido.detallePedidos, {
-    onDelete: 'RESTRICT',
-  })
+  @ManyToOne(() => Pedido, (pedido) => pedido.detallePedidos, { onDelete: 'RESTRICT' })
   @JoinColumn()
   pedido: Pedido;
-  @JoinColumn()
-  cantidad: number;
-  @PrimaryGeneratedColumn()
-  id: number;
 }

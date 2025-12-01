@@ -1,9 +1,8 @@
-import { IsString } from 'class-validator';
-
 export class CreatePizzaDto {
-  @IsString()
-  nombre_pizza: string;
-
-  @IsString()
+  nombre: string;
   descripcion: string;
+  precio: number;
+  stock?: number;   // opcional, por defecto 0
+  imagen: string;
+  demand?: number;  // opcional, por defecto 0
 }

@@ -1,65 +1,39 @@
-import { Cliente } from 'src/clientes/entities/cliente.entity';
-import { DetallePedido } from 'src/detalle_pedido/entities/detalle_pedido.entity';
-import { EstadoPedido } from 'src/estado_pedido/entities/estado_pedido.entity';
-import { Pago } from 'src/pagos/entities/pago.entity';
 import {
-  Column,
   Entity,
-  JoinColumn,
-  ManyToOne,
   PrimaryGeneratedColumn,
-  OneToOne,
+  Column,
+  ManyToOne,
   OneToMany,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Cliente } from '../../clientes/entities/cliente.entity';
+import { DetallePedido } from '../../detalle_pedido/entities/detalle_pedido.entity';
+import { Pago } from '../../pagos/entities/pago.entity';
+import { EstadoPedido } from '../../estado_pedido/entities/estado_pedido.entity';
 
 @Entity()
 export class Pedido {
   @PrimaryGeneratedColumn()
   id: number;
 
-  //preguntar si aca va la FK de Cliente
   @Column()
-  monto: number;
-
-  @Column()
-  direccion_envio: string;
-
-  @Column()
-  cantidad: number;
-
-  @Column('timestamp')
   fecha: Date;
 
-  @ManyToOne(() => Cliente, (cliente) => cliente.pedidos)
-  @JoinColumn()
+  @Column({ default: 'pendiente' })
+  estado: string;
+
+  @ManyToOne(() => Cliente, (cliente) => cliente.pedidos, { onDelete: 'CASCADE' })
   cliente: Cliente;
 
-  @OneToOne(() => Pago, (pago) => pago.pedido)
+  @OneToMany(() => DetallePedido, (detalle) => detalle.pedido, { cascade: true })
+  detallePedidos: DetallePedido[];
+
+  @OneToOne(() => Pago, (pago) => pago.pedido, { cascade: true })
   @JoinColumn()
   pago: Pago;
 
-  @OneToOne(() => EstadoPedido, (esPedido) => esPedido.pedido)
+  @OneToOne(() => EstadoPedido, (estado) => estado.pedido, { cascade: true })
   @JoinColumn()
-  esPedido: EstadoPedido;
-
-  @OneToMany(() => DetallePedido, (detallePedido) => detallePedido.pedido)
-  detalles: DetallePedido[];
-  detallePedidos: any;
-
-  //trabajar el pedido personalizado.
-  // pedido.entity.ts
-  // @Entity()
-  // export class Pedido {
-  //   @PrimaryGeneratedColumn('uuid')
-  //   id: string;
-
-  //   @ManyToOne(() => Pizza)
-  //   pizzaBase: Pizza; // por ejemplo, “Muzzarella”
-
-  //   @Column('simple-array')
-  //   ingredientesExtra: string[]; // ["bacon", "rúcula"]
-
-  //   @Column({ default: 0 })
-  //   precioTotal: number;
-  // }
+  estadoPedido: EstadoPedido; // 👈 faltaba esta línea
 }

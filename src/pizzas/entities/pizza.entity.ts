@@ -1,12 +1,6 @@
-import { Cliente } from 'src/clientes/entities/cliente.entity';
-import { DetallePedido } from 'src/detalle_pedido/entities/detalle_pedido.entity';
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Cliente } from '../../clientes/entities/cliente.entity';
+import { DetallePedido } from '../../detalle_pedido/entities/detalle_pedido.entity';
 
 @Entity()
 export class Pizza {
@@ -22,15 +16,18 @@ export class Pizza {
   @Column()
   precio: number;
 
-  @Column()
+  @Column({ default: 0 })
   stock: number;
 
   @Column()
-  imagen: string; // ✅ NUEVO CAMPO
+  imagen: string;
 
-  @OneToMany(() => DetallePedido, (detallePedido) => detallePedido.pizza)
-  detallePedidos: DetallePedido[];
+  @Column({ default: 0 })
+  demand: number;
 
-  @ManyToOne(() => Cliente, (cliente) => cliente.pizzas)
+  @ManyToOne(() => Cliente, (cliente) => cliente.pizzas, { nullable: true })
   cliente: Cliente;
+
+  @OneToMany(() => DetallePedido, (detalle) => detalle.pizza)
+  detallePedidos: DetallePedido[];
 }

@@ -6,44 +6,40 @@ import { AppService } from './app.service';
 import { PedidosModule } from './pedidos/pedidos.module';
 import { PagosModule } from './pagos/pagos.module';
 import { ClientesModule } from './clientes/clientes.module';
-import { EstadoPedidoModule } from './estado_pedido/estado_pedido.module';
+import { EstadoPedido } from './estado_pedido/entities/estado_pedido.entity';
 import { DetallePedidoModule } from './detalle_pedido/detalle_pedido.module';
 import { PizzasModule } from './pizzas/pizzas.module';
 import { PersonalizarPizzasModule } from './personalizar-pizzas/personalizar-pizzas.module';
+
+import { EstadoPedidoModule } from './estado_pedido/estado_pedido.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-
-TypeOrmModule.forRootAsync({
-  imports: [ConfigModule],
-  inject: [ConfigService],
-  useFactory: (config: ConfigService) => ({
-    type: 'mysql',
-    host: config.get<string>('DB_HOST') ?? 'localhost',
-    port: parseInt(config.get<string>('DB_PORT') ?? '3306'),
-    username: config.get<string>('DB_USER') ?? 'root',
-    password: config.get<string>('DB_PASSWORD') ?? '',
-    database: config.get<string>('DB_NAME') ?? 'test',
-    autoLoadEntities: true,
-    synchronize: true, // ⚠️ solo en desarrollo
-
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  }),
-}),
-
-
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'mysql',
+        host: config.get<string>('DB_HOST') ?? 'localhost',
+        port: parseInt(config.get<string>('DB_PORT') ?? '3306'),
+        username: config.get<string>('DB_USER') ?? 'root',
+        password: config.get<string>('DB_PASSWORD') ?? '',
+        database: config.get<string>('DB_NAME') ?? 'test',
+        autoLoadEntities: true,
+        synchronize: true, // ⚠️ solo en desarrollo
+        ssl: { rejectUnauthorized: false },
+      }),
+    }),
     PedidosModule,
     PagosModule,
     ClientesModule,
-    EstadoPedidoModule,
     DetallePedidoModule,
     PizzasModule,
     PersonalizarPizzasModule,
+    EstadoPedidoModule, // 👈 lo volvés a incluir acá
   ],
   controllers: [AppController],
   providers: [AppService],

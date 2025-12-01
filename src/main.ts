@@ -6,7 +6,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      'https://tp-finalfrotend.vercel.app/', // 👈 dominio de tu frontend en Vercel
+      'https://tp-finalfrotend.vercel.app', // 👈 dominio de tu frontend en Vercel
     ],
     credentials: true,
   });

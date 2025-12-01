@@ -1,11 +1,5 @@
-import { Pedido } from 'src/pedidos/entities/pedido.entity';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Pedido } from '../../pedidos/entities/pedido.entity';
 
 @Entity()
 export class Pago {
@@ -13,12 +7,12 @@ export class Pago {
   id: number;
 
   @Column()
-  metodo_pago: string;
+  metodo: string;
 
   @Column()
-  estado_pago: string;
+  monto: number;
 
-  @OneToOne(() => Pedido, (pedido) => pedido.pago)
+  @OneToOne(() => Pedido, (pedido) => pedido.pago, { onDelete: 'CASCADE' })
   @JoinColumn()
   pedido: Pedido;
 }

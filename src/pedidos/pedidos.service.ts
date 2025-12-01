@@ -22,24 +22,23 @@ export class PedidosService {
     private readonly detallePedidoRepository: Repository<DetallePedido>,
   ) {}
 
-async create(
-    creatPedidoDto: CreatePedidoDto,
+  async create(
+    createPedidoDto: CreatePedidoDto,
     nombre_usuario: string,
   ): Promise<Pedido> {
     try {
       const nuevoCliente = await this.clienteRepository.findOne({
         where: { nombre_usuario },
-      }); // 👈 await agregado
+      });
 
       if (!nuevoCliente) {
-        console.error('No existe el cliente');
-        throw new NotFoundException('Cliente no encontrado'); // 👈 mejor manejo de error
+        throw new NotFoundException('Cliente no encontrado');
       }
 
       const nuevoPedido = this.pedidoRepository.create({
-        ...creatPedidoDto,
-        cliente: nuevoCliente, // 👈 asociación del cliente con el pedido
-        detalles: [],
+        ...createPedidoDto,
+        cliente: nuevoCliente,
+        detallePedidos: [], // 👈 nombre correcto
       });
 
       return await this.pedidoRepository.save(nuevoPedido);
@@ -51,14 +50,14 @@ async create(
 
   async findAll(): Promise<Pedido[]> {
     return await this.pedidoRepository.find({
-      relations: ['cliente', 'detalles.pizza'],
+      relations: ['cliente', 'detallePedidos', 'detallePedidos.pizza'], // 👈 corregido
     });
   }
 
   async findOne(id: number): Promise<Pedido | null> {
     const pedido = await this.pedidoRepository.findOne({
       where: { id },
-      relations: ['cliente', 'detalles', 'detalles.pizza'],
+      relations: ['cliente', 'detallePedidos', 'detallePedidos.pizza'], // 👈 corregido
     });
     if (!pedido) {
       throw new NotFoundException('Pedido no encontrado');
