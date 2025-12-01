@@ -6,18 +6,14 @@ import { AppService } from './app.service';
 import { PedidosModule } from './pedidos/pedidos.module';
 import { PagosModule } from './pagos/pagos.module';
 import { ClientesModule } from './clientes/clientes.module';
-import { EstadoPedido } from './estado_pedido/entities/estado_pedido.entity';
 import { DetallePedidoModule } from './detalle_pedido/detalle_pedido.module';
 import { PizzasModule } from './pizzas/pizzas.module';
 import { PersonalizarPizzasModule } from './personalizar-pizzas/personalizar-pizzas.module';
-
 import { EstadoPedidoModule } from './estado_pedido/estado_pedido.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -39,7 +35,7 @@ import { EstadoPedidoModule } from './estado_pedido/estado_pedido.module';
     DetallePedidoModule,
     PizzasModule,
     PersonalizarPizzasModule,
-    EstadoPedidoModule, // 👈 lo volvés a incluir acá
+    EstadoPedidoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
