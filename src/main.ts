@@ -11,13 +11,13 @@ async function bootstrap() {
     cors({
       origin: [
         'http://localhost:5173', // desarrollo local
-
         'https://pizzaconmigofinal.web.app', // producción en Firebase
       ],
       methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
       credentials: true,
     }),
   );
+  console.log('✅ CORS aplicado correctamente'); // 👈 Log extra
 
   app.useGlobalPipes(
     new ValidationPipe({
