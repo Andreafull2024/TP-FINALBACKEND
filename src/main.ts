@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import * as cors from 'cors'; // 👈 Importá el paquete
+import cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,11 +10,11 @@ async function bootstrap() {
   app.use(
     cors({
       origin: [
-        'http://localhost:5173',                 // desarrollo local
-  
-        'https://pizzaconmigofinal.web.app',     // producción en Firebase
+        'http://localhost:5173', // desarrollo local
+
+        'https://pizzaconmigofinal.web.app', // producción en Firebase
       ],
-      methods: ['GET','HEAD','PUT','PATCH','POST','DELETE'],
+      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
       credentials: true,
     }),
   );
@@ -30,4 +30,5 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`🚀 Backend corriendo en http://localhost:${port}`);
 }
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 bootstrap();
