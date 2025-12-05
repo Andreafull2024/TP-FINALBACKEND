@@ -19,14 +19,13 @@ import { EstadoPedidoModule } from './estado_pedido/estado_pedido.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'mysql',
-        host: config.get<string>('DB_HOST') ?? 'localhost',
+        host: config.get<string>('DB_HOST'),
         port: parseInt(config.get<string>('DB_PORT') ?? '3306'),
-        username: config.get<string>('DB_USER') ?? 'root',
-        password: config.get<string>('DB_PASSWORD') ?? '',
-        database: config.get<string>('DB_NAME') ?? 'test',
+        username: config.get<string>('DB_USER'),
+        password: config.get<string>('DB_PASSWORD'),
+        database: config.get<string>('DB_NAME'),
         autoLoadEntities: true,
-        synchronize: true, // ⚠️ solo en desarrollo
-        ssl: { rejectUnauthorized: false },
+        synchronize: true, // ⚠️ solo en desarrollo, desactivar en producción
       }),
     }),
     PedidosModule,
