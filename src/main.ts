@@ -28,4 +28,4 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`🚀 Backend corriendo en http://localhost:${port}`);
 }
-void bootstrap();
+bootstrap();
