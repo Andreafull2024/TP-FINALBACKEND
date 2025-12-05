@@ -6,14 +6,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // ✅ Habilitar CORS para tu frontend en Firebase
-  app.enableCors({
-    origin: [
-      'http://localhost:5173',                 // desarrollo local
-      'https://pizzaconmigofinal.web.app',     // producción en Firebase
-    ],
-    methods: ['GET','HEAD','PUT','PATCH','POST','DELETE'],
-    credentials: true,
-  });
+app.enableCors({
+  origin: [
+    'http://localhost:5173',                 // desarrollo local
+    'https://pizzaconmigofinal.web.app',     // producción en Firebase
+  ],
+  methods: ['GET','HEAD','PUT','PATCH','POST','DELETE'],
+  credentials: true,
+});
+
 
   app.useGlobalPipes(
     new ValidationPipe({
