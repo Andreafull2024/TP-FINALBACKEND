@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -6,18 +7,26 @@ import cors from 'cors';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // ✅ Usar el middleware cors en lugar de app.enableCors
+  // ✅ Middleware CORS
   app.use(
     cors({
       origin: [
         'http://localhost:5173', // desarrollo local
         'https://pizzaconmigofinal.web.app', // producción en Firebase
       ],
-      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
       credentials: true,
     }),
   );
-  console.log('✅ CORS aplicado correctamente'); // 👈 Log extra
+
+  // 👇 Manejo explícito de preflight requests (OPTIONS)
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const expressApp = app.getHttpAdapter().getInstance();
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  expressApp.options('*', cors());
+
+  console.log('✅ CORS aplicado correctamente (incluye OPTIONS)');
 
   app.useGlobalPipes(
     new ValidationPipe({
