@@ -19,8 +19,8 @@ async function bootstrap() {
   // Configuración de CORS
   app.enableCors({
     origin: [
-      'http://localhost:5173',               // desarrollo local con Vite
-      'https://pizzaconmigofinal.web.app',   // tu frontend en Firebase
+      'http://localhost:5173', // desarrollo local con Vite
+      'https://pizzaconmigofinal.web.app', // tu frontend en Firebase
       'https://pizzaconmigofinal.onrender.com', // opcional: si deployás frontend en Render
     ],
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'], // 👈 métodos permitidos
@@ -31,4 +31,4 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`🚀 Backend corriendo en http://localhost:${port}`);
 }
-bootstrap();
+void bootstrap();
