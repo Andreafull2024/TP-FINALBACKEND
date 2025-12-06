@@ -15,9 +15,13 @@ import { UpdateEstadoPedidoDto } from './dto/update-estado_pedido.dto';
 export class EstadoPedidoController {
   constructor(private readonly estadoPedidoService: EstadoPedidoService) {}
 
-  @Post()
-  create(@Body() createEstadoPedidoDto: CreateEstadoPedidoDto, id: number) {
-    return this.estadoPedidoService.create(createEstadoPedidoDto, id);
+  // Crear un estado de pedido con id en la URL
+  @Post(':id')
+  create(
+    @Param('id') id: string,
+    @Body() createEstadoPedidoDto: CreateEstadoPedidoDto,
+  ) {
+    return this.estadoPedidoService.create(createEstadoPedidoDto, +id);
   }
 
   @Get()

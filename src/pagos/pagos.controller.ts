@@ -16,8 +16,8 @@ export class PagosController {
   constructor(private readonly pagosService: PagosService) {}
 
   @Post()
-  create(@Body() createPagoDto: CreatePagoDto, fecha: Date) {
-    return this.pagosService.create(createPagoDto, fecha);
+  create(@Body() createPagoDto: CreatePagoDto) {
+    return this.pagosService.create(createPagoDto);
   }
 
   @Get()

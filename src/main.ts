@@ -1,37 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // ✅ Middleware CORS
-  app.use(
-    cors({
-      origin: [
-        'http://localhost:5173', // desarrollo local
-        'https://pizzaconmigofinal.web.app', // producción en Firebase
-      ],
-      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-      credentials: true,
-    }),
-  );
+  // ✅ CORS nativo de NestJS
+  app.enableCors({
+    origin: [
+      'http://localhost:5173', // desarrollo local
+      'https://pizzaconmigofinal.web.app', // producción en Firebase
+    ],
+    credentials: true,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  });
 
-  // 👇 Manejo explícito de preflight requests (OPTIONS)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const expressApp = app.getHttpAdapter().getInstance();
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  expressApp.options('*', cors());
-
-  console.log('✅ CORS aplicado correctamente (incluye OPTIONS)');
-
+  // ✅ Validación global de DTOs
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
+      whitelist: true, // elimina propiedades no definidas en el DTO
+      forbidNonWhitelisted: true, // lanza error si llegan propiedades extra
     }),
   );
 
@@ -39,5 +27,5 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`🚀 Backend corriendo en http://localhost:${port}`);
 }
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
+
 bootstrap();

@@ -14,7 +14,8 @@ export class CreatePedidoDto extends CreateClienteDto {
   @IsNumber()
   cantidad: number;
 
+  @IsNotEmpty()
   @IsDate()
   @Type(() => Date)
-  fecha_pedido: Date;
+  fecha: Date;
 }

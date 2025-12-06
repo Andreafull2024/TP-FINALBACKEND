@@ -1,9 +1,17 @@
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsDate } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreatePagoDto {
-  @IsString()
-  metodo_pago: string;
+  @IsNotEmpty()
+  @IsNumber()
+  monto: number;
 
-  @IsString()
-  estado_pago: string;
+  @IsNotEmpty()
+  @IsNumber()
+  pedidoId: number;
+
+  @IsNotEmpty()
+  @IsDate()
+  @Type(() => Date)
+  fecha: Date;
 }

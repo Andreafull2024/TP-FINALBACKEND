@@ -1,5 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
-import { Pedido } from '../../pedidos/entities/pedido.entity';
+// eslint-disable-next-line prettier/prettier
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+} from 'typeorm';
+import { Pedido } from 'src/pedidos/entities/pedido.entity';
 
 @Entity()
 export class Pago {
@@ -7,12 +13,12 @@ export class Pago {
   id: number;
 
   @Column()
-  metodo: string;
-
-  @Column()
   monto: number;
 
-  @OneToOne(() => Pedido, (pedido) => pedido.pago, { onDelete: 'CASCADE' })
-  @JoinColumn()
+  @Column({ type: 'timestamp' })
+  fecha: Date;
+
+  // eslint-disable-next-line prettier/prettier
+  @ManyToOne(() => Pedido, pedido => pedido.pago, { eager: true })
   pedido: Pedido;
 }

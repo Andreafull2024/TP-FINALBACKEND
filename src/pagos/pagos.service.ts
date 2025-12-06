@@ -19,44 +19,55 @@ export class PagosService {
     private readonly pedidoRepository: Repository<Pedido>,
   ) {}
 
-  async create(createPagoDto: CreatePagoDto, fecha: Date): Promise<Pago> {
+  async create(createPagoDto: CreatePagoDto): Promise<Pago> {
     try {
+      // Buscar el pedido asociado por ID
       const nuevoPedido = await this.pedidoRepository.findOne({
-        where: { fecha },
-      }); //aca pongo el id de Pedido
+        where: { id: createPagoDto.pedidoId },
+      });
       if (!nuevoPedido) {
-        console.error('no existe el pedido');
-        throw new NotFoundException('Pedido no encontrado'); //Manejo de error
+        throw new NotFoundException('Pedido no encontrado');
       }
 
+      // Crear el pago con los datos del DTO y asociarlo al pedido
       const nuevoPago = this.pagoRepository.create({
-        ...createPagoDto,
-        pedido: nuevoPedido, //asociacion del pago con el pedido
+        monto: createPagoDto.monto,
+        fecha: createPagoDto.fecha,
+        pedido: nuevoPedido,
       });
+
       return await this.pagoRepository.save(nuevoPago);
     } catch (error) {
-      console.error('Error al crear el pedido', error);
+      console.error('Error al crear el pago', error);
       throw new InternalServerErrorException('Error al crear pago');
     }
   }
 
   async findAll(): Promise<Pago[]> {
-    return await this.pagoRepository.find();
+    return await this.pagoRepository.find({ relations: ['pedido'] });
   }
 
-  async findOne(id: number): Promise<Pago | null> {
-    const pago = await this.pagoRepository.findOneBy({ id });
+  async findOne(id: number): Promise<Pago> {
+    const pago = await this.pagoRepository.findOne({
+      where: { id },
+      relations: ['pedido'],
+    });
     if (!pago) {
       throw new NotFoundException('Pago no encontrado');
     }
     return pago;
   }
 
-  update(id: number, updatePagoDto: UpdatePagoDto) {
-    return `This action updates a #${id} pago`;
+  async update(id: number, updatePagoDto: UpdatePagoDto): Promise<Pago> {
+    const pago = await this.pagoRepository.findOneBy({ id });
+    if (!pago) {
+      throw new NotFoundException('Pago no encontrado');
+    }
+    const actualizado = Object.assign(pago, updatePagoDto);
+    return await this.pagoRepository.save(actualizado);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<void> {
     const pago = await this.pagoRepository.findOne({ where: { id } });
     if (!pago) {
       throw new NotFoundException('Pago no encontrado');
