@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: tf-final-backend
+    name: tp-final-backend   # 👈 usa el mismo nombre que tu URL pública en Render
     env: node
     buildCommand: "npm install && npm run build"
     startCommand: "npm run start:prod"
@@ -19,4 +19,4 @@ services:
       - key: JWT_SECRET
         value: secret
       - key: PORT
-        value: 8080
+        value: 8080   # 👈 Render pasa este valor a process.env.PORT, tu main.ts lo toma
